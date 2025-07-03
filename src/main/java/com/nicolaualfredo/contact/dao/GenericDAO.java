@@ -4,10 +4,24 @@
  */
 package com.nicolaualfredo.contact.dao;
 
+import java.util.List;
+
 /**
  *
  * @author nicolaualfredo
+ * @param <T>
  */
-public class GenericDAO {
-    
+
+public interface GenericDAO<T> {
+
+    void save(T t);
+
+    void update(T t);
+
+    void delete(T t);
+
+    T findById(Integer id);
+
+    List<T> findAll();
+
 }
