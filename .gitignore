@@ -28,4 +28,4 @@ replay_pid*
 /target/
 
 # Ignore config files with sensitive data
-/config/config.properties
+*.properties
