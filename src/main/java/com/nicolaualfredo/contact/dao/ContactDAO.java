@@ -13,6 +13,11 @@ import java.util.List;
  */
 public class ContactDAO implements GenericDAO<Contact> {
 
+    private static final String SAVE = "INSERT INTO contact (name_contact, phone_contact, email_contact, photo_path) VALUES(?, ?, ?, ?)";
+    private static final String UPDATE = "UPDATE contact SET name_contact = ?, phone_contact = ?, email_contact = ?, photo_path = ? WHERE id_contact = ?";
+    private static final String DELETE = "DELETE FROM contact WHERE id_contact = ?";
+    private static final String FINDBYID = "SELECT * FROM contact WHERE id_contact = ?";
+    private static final String FINDALL = "SELECT * FROM contact"; 
     @Override
     public void save(Contact t) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
