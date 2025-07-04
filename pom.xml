@@ -16,13 +16,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>de.javasoft.synthetica</groupId>
-            <artifactId>syntheticaClassy</artifactId>
-            <version>3.0</version>
-        </dependency>
-
+        </dependency> 
     </dependencies>
 </project>
