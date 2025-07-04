@@ -2,7 +2,7 @@ package TestDAO;
 
 import com.nicolaualfredo.contact.controller.AdminController;
 import com.nicolaualfredo.contact.model.Admin;
-import java.awt.BorderLayout;
+import com.nicolaualfredo.contact.util.PasswordUtil;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Scanner;
@@ -64,8 +64,10 @@ public class AdminControllerTest {
         System.out.println("Username: ");
         admin.setUsernameAdmin(SCANNER.nextLine());
 
-        System.out.println("Password: ");
-        admin.setPassword_has(SCANNER.nextLine());
+        System.out.print("Password: ");
+        String password = SCANNER.nextLine();
+        String hashed = PasswordUtil.hash(password);
+        admin.setPassword_has(hashed);
 
         System.out.println("Full Name: ");
         admin.setFullName(SCANNER.nextLine());
@@ -95,8 +97,10 @@ public class AdminControllerTest {
         admin.setUsernameAdmin(SCANNER.nextLine());
 
         System.out.print("New Password: ");
-        admin.setPassword_has(SCANNER.nextLine());
-
+        String password = SCANNER.nextLine();
+        String hashed = PasswordUtil.hash(password);
+        admin.setPassword_has(hashed);
+        
         System.out.print("New Full Name (" + admin.getFullName() + "): ");
         admin.setFullName(SCANNER.nextLine());
 

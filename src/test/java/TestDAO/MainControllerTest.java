@@ -6,6 +6,7 @@ package TestDAO;
 
 import com.nicolaualfredo.contact.dao.AdminDAO;
 import com.nicolaualfredo.contact.model.Admin;
+import com.nicolaualfredo.contact.util.PasswordUtil;
 import java.util.Scanner;
 
 /**
@@ -34,10 +35,11 @@ public class MainControllerTest {
 
         System.out.print("Password: ");
         String password = SCANNER.nextLine();
+        String hashedPassword = PasswordUtil.hash(password);;
 
         Admin admin = new Admin();
         admin.setUsernameAdmin(username);
-        admin.setPassword_has(password);
+        admin.setPassword_has(hashedPassword);
 
         return ADMINDAO.login(admin);
     }

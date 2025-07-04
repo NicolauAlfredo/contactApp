@@ -32,6 +32,7 @@ public class AdminDAO implements GenericDAO<Admin> {
 
     /**
      * Saves a new Admin to the database.
+     *
      * @param admin
      */
     @Override
@@ -60,6 +61,7 @@ public class AdminDAO implements GenericDAO<Admin> {
 
     /**
      * Updates an existing Admin in the database.
+     *
      * @param admin
      */
     @Override
@@ -89,6 +91,7 @@ public class AdminDAO implements GenericDAO<Admin> {
 
     /**
      * Deletes an Admin from the database using their ID.
+     *
      * @param admin
      */
     @Override
