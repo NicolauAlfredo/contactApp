@@ -69,8 +69,10 @@ public class ContactControllerTest {
         System.out.print("Email: ");
         contact.setEmailContact(SCANNER.nextLine());
 
-        System.out.print("Photo Path: ");
-        contact.setPhotoPath(SCANNER.nextLine());
+        System.out.print("Photo file name (e.g., maria.jpg): ");
+        String imageName = SCANNER.nextLine();
+
+        contact.setPhotoPath("images/" + imageName);
 
         CONTROLLER.createContact(contact);
         System.out.println("Contact created successfully!");
@@ -88,16 +90,28 @@ public class ContactControllerTest {
         }
 
         System.out.print("New Name (" + contact.getNameContact() + "): ");
-        contact.setNameContact(SCANNER.nextLine());
+        String name = SCANNER.nextLine();
+        if (!name.isBlank()) {
+            contact.setNameContact(name);
+        }
 
         System.out.print("New Phone (" + contact.getPhoneContact() + "): ");
-        contact.setPhoneContact(SCANNER.nextLine());
+        String phone = SCANNER.nextLine();
+        if (!phone.isBlank()) {
+            contact.setPhoneContact(phone);
+        }
 
         System.out.print("New Email (" + contact.getEmailContact() + "): ");
-        contact.setEmailContact(SCANNER.nextLine());
+        String email = SCANNER.nextLine();
+        if (!email.isBlank()) {
+            contact.setEmailContact(email);
+        }
 
-        System.out.print("New Photo Path (" + contact.getPhotoPath() + "): ");
-        contact.setPhotoPath(SCANNER.nextLine());
+        System.out.print("New Photo file name [" + contact.getPhotoPath() + "] (leave blank to keep current): ");
+        String imageName = SCANNER.nextLine();
+        if (!imageName.isBlank()) {
+            contact.setPhotoPath("images/" + imageName);
+        }
 
         CONTROLLER.updateContact(contact);
         System.out.println("Contact updated successfully!");
