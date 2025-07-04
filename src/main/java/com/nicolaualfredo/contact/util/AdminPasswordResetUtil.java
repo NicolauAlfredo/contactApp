@@ -43,9 +43,7 @@ public class AdminPasswordResetUtil {
 
         try {
             Connection con = db.open();
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE admin SET password_hash = ? WHERE username = ?"
-            );
+            PreparedStatement ps = con.prepareStatement("UPDATE admin SET password_hash = ? WHERE username = ?");
             ps.setString(1, hashedPassword);
             ps.setString(2, username);
 
