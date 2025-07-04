@@ -12,11 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Data Access Object (DAO) class responsible for performing all CRUD operations
+ * for the Admin entity in the database.
  *
- * @author nicolaualfredo
+ * This class implements the GenericDAO interface using JDBC. It also includes a
+ * login method for authentication.
+ *
+ * Author: nicolaualfredo
  */
 public class AdminDAO implements GenericDAO<Admin> {
 
+    // SQL statements used for Admin operations
     private static final String SAVE = "INSERT INTO admin (username, password_hash, full_name, email, created_at) VALUES(?, ?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE admin SET username = ?, password_hash = ?, full_name = ?, email = ?, created_at = ? WHERE id_admin = ?";
     private static final String DELETE = "DELETE FROM admin WHERE id_admin = ?";
@@ -24,6 +30,9 @@ public class AdminDAO implements GenericDAO<Admin> {
     private static final String FINDALL = "SELECT * FROM admin";
     private static final String LOGIN = "SELECT * FROM admin WHERE username = ? AND password_hash = ?";
 
+    /**
+     * Saves a new Admin to the database.
+     */
     @Override
     public void save(Admin admin) {
         if (admin == null) {
@@ -48,6 +57,9 @@ public class AdminDAO implements GenericDAO<Admin> {
         }
     }
 
+    /**
+     * Updates an existing Admin in the database.
+     */
     @Override
     public void update(Admin admin) {
         if (admin == null) {
@@ -73,6 +85,9 @@ public class AdminDAO implements GenericDAO<Admin> {
         }
     }
 
+    /**
+     * Deletes an Admin from the database using their ID.
+     */
     @Override
     public void delete(Admin admin) {
         if (admin == null || admin.getIdAdmin() == null) {
@@ -93,6 +108,12 @@ public class AdminDAO implements GenericDAO<Admin> {
         }
     }
 
+    /**
+     * Finds an Admin by ID.
+     *
+     * @param id The ID of the admin to find.
+     * @return The Admin object if found, or null.
+     */
     @Override
     public Admin findById(Integer id) {
         DBConnection db = new DBConnection();
@@ -121,6 +142,11 @@ public class AdminDAO implements GenericDAO<Admin> {
         return admin;
     }
 
+    /**
+     * Retrieves all Admins from the database.
+     *
+     * @return A list of Admin objects.
+     */
     @Override
     public List<Admin> findAll() {
         DBConnection db = new DBConnection();
@@ -152,8 +178,8 @@ public class AdminDAO implements GenericDAO<Admin> {
     /**
      * Authenticates an admin using username and password hash.
      *
-     * @param admin Admin object containing login credentials
-     * @return true if credentials match a database record, false otherwise
+     * @param admin Admin object containing login credentials.
+     * @return true if the credentials match a database record, false otherwise.
      */
     public boolean login(Admin admin) {
         if (admin.getUsernameAdmin() == null || admin.getPassword_has() == null) {
