@@ -24,6 +24,7 @@ public class ContactDAO implements GenericDAO<Contact> {
     private static final String DELETE = "DELETE FROM contact WHERE id_contact = ?";
     private static final String FINDBYID = "SELECT * FROM contact WHERE id_contact = ?";
     private static final String FINDALL = "SELECT * FROM contact";
+    private static final String FINDBYNAME = "SELECT * FROM contact WHERE name_contact = ?";
 
     /**
      * Saves a new contact to the database.
@@ -171,4 +172,31 @@ public class ContactDAO implements GenericDAO<Contact> {
 
         return contacts;
     }
+
+    public Contact findByName(String name) {
+        DBConnection db = new DBConnection();
+        Contact contact = null;
+
+        try {
+            PreparedStatement ps = db.open().prepareStatement(FINDBYNAME);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                contact = new Contact();
+                contact.setIdContact(rs.getInt("id_contact"));
+                contact.setNameContact(rs.getString("name_contact"));
+                contact.setPhoneContact(rs.getString("phone_contact"));
+                contact.setEmailContact(rs.getString("email_contact"));
+                contact.setPhotoPath(rs.getString("photo_path"));
+            }
+        } catch (SQLException e) {
+            System.err.println("[ContactDAO] -> Error finding contacts by name: " + e.getLocalizedMessage());
+        } finally {
+            db.close();
+        }
+
+        return contact;
+    }
+
 }

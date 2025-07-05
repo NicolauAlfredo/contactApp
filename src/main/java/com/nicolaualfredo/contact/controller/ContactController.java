@@ -54,4 +54,8 @@ public class ContactController {
     public List<Contact> getAllContacts() {
         return contactDAO.findAll();
     }
+
+    public Contact getContactByName(String name) {
+        return contactDAO.findByName(name);
+    }
 }
