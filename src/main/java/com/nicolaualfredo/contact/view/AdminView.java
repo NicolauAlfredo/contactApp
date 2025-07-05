@@ -5,7 +5,12 @@
 package com.nicolaualfredo.contact.view;
 
 import com.nicolaualfredo.contact.controller.AdminController;
+import com.nicolaualfredo.contact.model.Admin;
+import com.nicolaualfredo.contact.util.PasswordUtil;
+import java.sql.Timestamp;
 import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,9 +34,9 @@ public class AdminView extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tableAdmins.getModel();
         model.setRowCount(0);
 
-        List<com.nicolaualfredo.contact.model.Admin> admins = adminController.getAllAdmins();
+        List<Admin> admins = adminController.getAllAdmins();
 
-        for (com.nicolaualfredo.contact.model.Admin admin : admins) {
+        for (Admin admin : admins) {
             model.addRow(new Object[]{
                 admin.getIdAdmin(),
                 admin.getUsernameAdmin(),
@@ -39,13 +44,167 @@ public class AdminView extends javax.swing.JFrame {
                 admin.getEmail()
             });
         }
+
+        checkIdField();
     }
-    
-    private void loadByName() {
-        
+
+    private void loadAdminByUsername() {
+        AdminController adminController = new AdminController();
+        DefaultTableModel model = (DefaultTableModel) tableAdmins.getModel();
+        model.setRowCount(0);
+
+        lblMessageSearch.setText("");
+
+        String username = txtSearch.getText().trim();
+
+        if (username.isEmpty()) {
+            showTemporaryMessage(lblMessageSearch, "Please enter a username to search.", 5000);
+            return;
+        }
+
+        Admin admin = adminController.getAdminByUsername(username);
+
+        if (admin != null) {
+            model.addRow(new Object[]{
+                admin.getIdAdmin(),
+                admin.getUsernameAdmin(),
+                admin.getFullName(),
+                admin.getEmail()
+            });
+        } else {
+            showTemporaryMessage(lblMessageSearch, "No admin found with that username.", 5000);
+        }
     }
-    
-    
+
+    private void saveAdmin() {
+        if (!validateFields()) {
+            return;
+        }
+
+        Admin admin = new Admin();
+        AdminController controller = new AdminController();
+
+        admin.setUsernameAdmin(txtUsername.getText().trim());
+        admin.setPassword_has(PasswordUtil.hash(txtPassword.getText().trim()));
+        admin.setFullName(txtFullName.getText().trim());
+        admin.setEmail(txtEmail.getText());
+        admin.setCreated_at(new Timestamp(System.currentTimeMillis()));
+
+        if (!txtId.getText().isEmpty()) {
+            showTemporaryMessage(lblMessage, "Admin created successfully.", 5000);
+        }
+
+        controller.createAdmin(admin);
+        showTemporaryMessage(lblMessage, "Admin created successfully.", 5000);
+        clearFields();
+        loadAdmins();
+    }
+
+    private void updateAdmin() {
+        if (txtId.getText().isEmpty()) {
+            showTemporaryMessage(lblMessage, "Select an admin to update.", 5000);
+            return;
+        }
+
+        Admin admin = new Admin();
+        AdminController controller = new AdminController();
+
+        if (!validateFields()) {
+            return;
+        }
+
+        admin.setIdAdmin(Integer.parseInt(txtId.getText()));
+        admin.setUsernameAdmin(txtUsername.getText());
+        admin.setPassword_has(PasswordUtil.hash(txtPassword.getText()));
+        admin.setFullName(txtFullName.getText());
+        admin.setEmail(txtEmail.getText());
+
+        controller.updateAdmin(admin);
+        showTemporaryMessage(lblMessage, "Admin updated successfully.", 5000);
+        clearFields();
+        loadAdmins();
+    }
+
+    private void deleteAdmin() {
+        if (txtId.getText().isEmpty()) {
+            showTemporaryMessage(lblMessage, "Select an admin to delete.", 5000);
+            return;
+        }
+
+        Admin admin = new Admin();
+        AdminController controller = new AdminController();
+
+        int id = Integer.parseInt(txtId.getText());
+
+        admin = controller.getAdminById(id);
+        if (admin == null) {
+            showTemporaryMessage(lblMessage, "Admin not found.", 5000);
+            return;
+        }
+
+        controller.deleteAdmin(admin);
+        clearFields();
+        loadAdmins();
+        showTemporaryMessage(lblMessage, "Admin deleted successfully.", 5000);
+
+    }
+
+    private void clearFields() {
+        // Form
+        txtId.setText("");
+        txtUsername.setText("");
+        txtPassword.setText("");
+        txtFullName.setText("");
+        txtEmail.setText("");
+    }
+
+    private void getDataFromTable() {
+        int row = tableAdmins.getSelectedRow();
+
+        if (row != -1) {
+            String id = tableAdmins.getValueAt(row, 0).toString();
+            String username = tableAdmins.getValueAt(row, 1).toString();
+            String fullName = tableAdmins.getValueAt(row, 2).toString();
+            String email = tableAdmins.getValueAt(row, 3).toString();
+
+            txtId.setText(id);
+            txtUsername.setText(username);
+            txtFullName.setText(fullName);
+            txtEmail.setText(email);
+        }
+
+        checkIdField();
+    }
+
+    private boolean validateFields() {
+        if (txtUsername.getText().trim().isEmpty()
+                || txtPassword.getText().trim().isEmpty()
+                || txtFullName.getText().trim().isEmpty()
+                || txtEmail.getText().trim().isEmpty()) {
+
+            showTemporaryMessage(lblMessage, "Please fill in all required fields.", 5000);
+            return false;
+        }
+        checkIdField();
+        return true;
+    }
+
+    public void showTemporaryMessage(JLabel label, String message, int durationMillis) {
+        label.setText(message);
+
+        Timer timer = new Timer(durationMillis, e -> label.setText(""));
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    private void checkIdField() {
+        if (!txtId.getText().trim().isEmpty()) {
+            btnSave.setEnabled(false);
+        } else {
+            btnSave.setEnabled(true);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -68,7 +227,7 @@ public class AdminView extends javax.swing.JFrame {
         subPanelForm = new javax.swing.JPanel();
         PanelId = new javax.swing.JPanel();
         lblEmail1 = new javax.swing.JLabel();
-        txtEmail1 = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
         PanelUsername = new javax.swing.JPanel();
         lblUsername = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
@@ -90,8 +249,10 @@ public class AdminView extends javax.swing.JFrame {
         PanelTable = new javax.swing.JPanel();
         sPTableAdmins = new javax.swing.JScrollPane();
         tableAdmins = new javax.swing.JTable();
-        txtSearch = new javax.swing.JTextField();
         lblSearch = new javax.swing.JLabel();
+        lblMessageSearch = new javax.swing.JLabel();
+        txtSearch = new javax.swing.JTextField();
+        lblReload = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -108,6 +269,11 @@ public class AdminView extends javax.swing.JFrame {
         lblAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/admin_menu.png"))); // NOI18N
         lblAdmin.setText("ADMIN");
         lblAdmin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAdminMouseClicked(evt);
+            }
+        });
 
         Separator.setBackground(new java.awt.Color(53, 123, 244));
         Separator.setForeground(new java.awt.Color(53, 123, 244));
@@ -118,12 +284,22 @@ public class AdminView extends javax.swing.JFrame {
         lblContact.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/contact_menu.png"))); // NOI18N
         lblContact.setText("CONTACT");
         lblContact.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblContact.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblContactMouseClicked(evt);
+            }
+        });
 
         lblAboutUS.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
         lblAboutUS.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAboutUS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/about.png"))); // NOI18N
         lblAboutUS.setText("ABOUT US");
         lblAboutUS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblAboutUS.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAboutUSMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout subPanelMenuLayout = new javax.swing.GroupLayout(subPanelMenu);
         subPanelMenu.setLayout(subPanelMenuLayout);
@@ -197,9 +373,9 @@ public class AdminView extends javax.swing.JFrame {
         lblEmail1.setText("ID");
         PanelId.add(lblEmail1, java.awt.BorderLayout.PAGE_START);
 
-        txtEmail1.setEditable(false);
-        txtEmail1.setEnabled(false);
-        PanelId.add(txtEmail1, java.awt.BorderLayout.CENTER);
+        txtId.setEditable(false);
+        txtId.setEnabled(false);
+        PanelId.add(txtId, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelId);
 
@@ -263,14 +439,29 @@ public class AdminView extends javax.swing.JFrame {
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
         btnSave.setText("Save");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSaveMouseClicked(evt);
+            }
+        });
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/delete.png"))); // NOI18N
         btnDelete.setText("Delete");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteMouseClicked(evt);
+            }
+        });
 
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/update.png"))); // NOI18N
         btnUpdate.setText("Update");
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUpdateMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout subPanelButtonsLayout = new javax.swing.GroupLayout(subPanelButtons);
         subPanelButtons.setLayout(subPanelButtonsLayout);
@@ -304,7 +495,6 @@ public class AdminView extends javax.swing.JFrame {
         lblMessage.setFont(new java.awt.Font("Sitka Text", 0, 13)); // NOI18N
         lblMessage.setForeground(new java.awt.Color(255, 255, 255));
         lblMessage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMessage.setText("Admin created successfully!");
 
         javax.swing.GroupLayout subPanelMessageLayout = new javax.swing.GroupLayout(subPanelMessage);
         subPanelMessage.setLayout(subPanelMessageLayout);
@@ -338,11 +528,34 @@ public class AdminView extends javax.swing.JFrame {
                 "ID", "USERNAME", "FULL NAME", "EMAIL"
             }
         ));
+        tableAdmins.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableAdminsMouseClicked(evt);
+            }
+        });
         sPTableAdmins.setViewportView(tableAdmins);
 
         lblSearch.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/search.png"))); // NOI18N
         lblSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblSearchMouseClicked(evt);
+            }
+        });
+
+        lblMessageSearch.setFont(new java.awt.Font("Sitka Text", 0, 13)); // NOI18N
+        lblMessageSearch.setForeground(new java.awt.Color(53, 123, 244));
+        lblMessageSearch.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        lblReload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/reload.png"))); // NOI18N
+        lblReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblReload.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblReloadMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelTableLayout = new javax.swing.GroupLayout(PanelTable);
         PanelTable.setLayout(PanelTableLayout);
@@ -351,23 +564,28 @@ public class AdminView extends javax.swing.JFrame {
             .addGroup(PanelTableLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelTableLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(PanelTableLayout.createSequentialGroup()
+                        .addComponent(lblReload, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblMessageSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE))
+                    .addComponent(sPTableAdmins, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         PanelTableLayout.setVerticalGroup(
             PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelTableLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblMessageSearch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblReload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -376,6 +594,54 @@ public class AdminView extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void lblAdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAdminMouseClicked
+        // TODO add your handling code here:
+        showTemporaryMessage(lblMessage, "You are on the Admin page.", 5000);
+    }//GEN-LAST:event_lblAdminMouseClicked
+
+    private void lblContactMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblContactMouseClicked
+        // TODO add your handling code here:
+        new ContactView().setVisible(true);
+        AdminView.this.dispose();
+    }//GEN-LAST:event_lblContactMouseClicked
+
+    private void lblAboutUSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAboutUSMouseClicked
+        // TODO add your handling code here:
+        showTemporaryMessage(lblMessage, "Come soon", 5000);
+    }//GEN-LAST:event_lblAboutUSMouseClicked
+
+    private void lblSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSearchMouseClicked
+        // TODO add your handling code here:
+        loadAdminByUsername();
+    }//GEN-LAST:event_lblSearchMouseClicked
+
+    private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
+        // TODO add your handling code here:
+        saveAdmin();
+    }//GEN-LAST:event_btnSaveMouseClicked
+
+    private void btnDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMouseClicked
+        // TODO add your handling code here:
+        deleteAdmin();
+    }//GEN-LAST:event_btnDeleteMouseClicked
+
+    private void btnUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateMouseClicked
+        // TODO add your handling code here:
+        updateAdmin();
+    }//GEN-LAST:event_btnUpdateMouseClicked
+
+    private void tableAdminsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAdminsMouseClicked
+        // TODO add your handling code here:
+        getDataFromTable();
+    }//GEN-LAST:event_tableAdminsMouseClicked
+
+    private void lblReloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblReloadMouseClicked
+        // TODO add your handling code here:
+        clearFields();
+        loadAdmins();
+        btnSave.setEnabled(true);
+    }//GEN-LAST:event_lblReloadMouseClicked
 
     /**
      * @param args the command line arguments
@@ -424,7 +690,9 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JLabel lblFullName;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblMessage;
+    private javax.swing.JLabel lblMessageSearch;
     private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblReload;
     private javax.swing.JLabel lblSearch;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JScrollPane sPTableAdmins;
@@ -435,8 +703,8 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JPanel subPanelMessage;
     private javax.swing.JTable tableAdmins;
     private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtEmail1;
     private javax.swing.JTextField txtFullName;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtUsername;

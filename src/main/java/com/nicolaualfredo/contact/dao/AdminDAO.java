@@ -24,11 +24,12 @@ public class AdminDAO implements GenericDAO<Admin> {
 
     // SQL statements used for Admin operations
     private static final String SAVE = "INSERT INTO admin (username, password_hash, full_name, email, created_at) VALUES(?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE admin SET username = ?, password_hash = ?, full_name = ?, email = ?, created_at = ? WHERE id_admin = ?";
+    private static final String UPDATE = "UPDATE admin SET username = ?, password_hash = ?, full_name = ?, email = ? WHERE id_admin = ?";
     private static final String DELETE = "DELETE FROM admin WHERE id_admin = ?";
     private static final String FINDBYID = "SELECT * FROM admin WHERE id_admin = ?";
     private static final String FINDALL = "SELECT * FROM admin";
     private static final String LOGIN = "SELECT * FROM admin WHERE username = ? AND password_hash = ?";
+    private static final String FINDBYUSERNAME = "SELECT * FROM admin WHERE username = ?";
 
     /**
      * Saves a new Admin to the database.
@@ -79,8 +80,7 @@ public class AdminDAO implements GenericDAO<Admin> {
             ps.setString(2, admin.getPassword_has());
             ps.setString(3, admin.getFullName());
             ps.setString(4, admin.getEmail());
-            ps.setTimestamp(5, admin.getCreated_at());
-            ps.setInt(6, admin.getIdAdmin());
+            ps.setInt(5, admin.getIdAdmin());
             ps.execute();
         } catch (SQLException e) {
             System.err.println("[AdminDAO] -> Error updating admin: " + e.getLocalizedMessage());
@@ -211,4 +211,32 @@ public class AdminDAO implements GenericDAO<Admin> {
 
         return loginSuccessful;
     }
+
+    public Admin findByUsername(String username) {
+        DBConnection db = new DBConnection();
+        Admin admin = null;
+
+        try {
+            PreparedStatement ps = db.open().prepareStatement(FINDBYUSERNAME);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                admin = new Admin();
+                admin.setIdAdmin(rs.getInt("id_admin"));
+                admin.setUsernameAdmin(rs.getString("username"));
+                admin.setPassword_has(rs.getString("password_hash"));
+                admin.setFullName(rs.getString("full_name"));
+                admin.setEmail(rs.getString("email"));
+                admin.setCreated_at(rs.getTimestamp("created_at"));
+            }
+        } catch (SQLException e) {
+            System.err.println("[AdminDAO] -> Error finding admin by username: " + e.getLocalizedMessage());
+        } finally {
+            db.close();
+        }
+
+        return admin;
+    }
+
 }

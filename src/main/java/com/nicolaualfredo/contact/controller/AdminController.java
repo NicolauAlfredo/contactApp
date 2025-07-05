@@ -47,6 +47,10 @@ public class AdminController {
         return true;
     }
 
+    public Admin getAdminByUsername(String username) {
+        return adminDAO.findByUsername(username);
+    }
+
     public Admin getAdminById(Integer id) {
         return adminDAO.findById(id);
     }
