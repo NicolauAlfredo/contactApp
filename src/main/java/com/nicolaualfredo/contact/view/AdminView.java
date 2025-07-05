@@ -252,7 +252,7 @@ public class AdminView extends javax.swing.JFrame {
         lblSearch = new javax.swing.JLabel();
         lblMessageSearch = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
-        lblReload = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -548,12 +548,11 @@ public class AdminView extends javax.swing.JFrame {
         lblMessageSearch.setForeground(new java.awt.Color(53, 123, 244));
         lblMessageSearch.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        lblReload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/reload.png"))); // NOI18N
-        lblReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblReload.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/reload.png"))); // NOI18N
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblReloadMouseClicked(evt);
+                jLabel1MouseClicked(evt);
             }
         });
 
@@ -565,7 +564,7 @@ public class AdminView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelTableLayout.createSequentialGroup()
-                        .addComponent(lblReload, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblMessageSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -583,7 +582,7 @@ public class AdminView extends javax.swing.JFrame {
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblMessageSearch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblReload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
                 .addContainerGap())
@@ -608,7 +607,7 @@ public class AdminView extends javax.swing.JFrame {
 
     private void lblAboutUSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAboutUSMouseClicked
         // TODO add your handling code here:
-        showTemporaryMessage(lblMessage, "Come soon", 5000);
+        showTemporaryMessage(lblMessage, "Come soon!!", 5000);
     }//GEN-LAST:event_lblAboutUSMouseClicked
 
     private void lblSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSearchMouseClicked
@@ -636,12 +635,12 @@ public class AdminView extends javax.swing.JFrame {
         getDataFromTable();
     }//GEN-LAST:event_tableAdminsMouseClicked
 
-    private void lblReloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblReloadMouseClicked
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         // TODO add your handling code here:
         clearFields();
         loadAdmins();
         btnSave.setEnabled(true);
-    }//GEN-LAST:event_lblReloadMouseClicked
+    }//GEN-LAST:event_jLabel1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -681,6 +680,7 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblAboutUS;
     private javax.swing.JLabel lblAdmin;
     private javax.swing.JLabel lblAdministraction;
@@ -692,7 +692,6 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JLabel lblMessage;
     private javax.swing.JLabel lblMessageSearch;
     private javax.swing.JLabel lblPassword;
-    private javax.swing.JLabel lblReload;
     private javax.swing.JLabel lblSearch;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JScrollPane sPTableAdmins;
