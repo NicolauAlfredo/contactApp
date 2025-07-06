@@ -72,7 +72,7 @@ public class AdminView extends javax.swing.JFrame {
                 admin.getEmail()
             });
         } else {
-            showTemporaryMessage(lblMessageSearch, "No admin found with that username.", 5000);
+            showTemporaryMessage(lblMessageSearch, "No admin found.", 5000);
         }
     }
 
@@ -560,7 +560,7 @@ public class AdminView extends javax.swing.JFrame {
             }
         });
 
-        lblMessageSearch.setFont(new java.awt.Font("Sitka Text", 0, 13)); // NOI18N
+        lblMessageSearch.setFont(new java.awt.Font("Sitka Text", 0, 12)); // NOI18N
         lblMessageSearch.setForeground(new java.awt.Color(53, 123, 244));
         lblMessageSearch.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 

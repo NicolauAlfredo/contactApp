@@ -322,6 +322,7 @@ public class ContactView extends javax.swing.JFrame {
         lblAdmin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/admin_menu.png"))); // NOI18N
         lblAdmin.setText("ADMIN");
+        lblAdmin.setToolTipText("Go to Admin page");
         lblAdmin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -338,6 +339,7 @@ public class ContactView extends javax.swing.JFrame {
         lblContact.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblContact.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/contact_menu.png"))); // NOI18N
         lblContact.setText("CONTACT");
+        lblContact.setToolTipText("Go to Contact page");
         lblContact.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblContact.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -349,6 +351,7 @@ public class ContactView extends javax.swing.JFrame {
         lblAboutUS.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAboutUS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/about.png"))); // NOI18N
         lblAboutUS.setText("ABOUT US");
+        lblAboutUS.setToolTipText("Find out more about us");
         lblAboutUS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblAboutUS.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -429,6 +432,7 @@ public class ContactView extends javax.swing.JFrame {
         PanelId.add(lblEmail1, java.awt.BorderLayout.PAGE_START);
 
         txtId.setEditable(false);
+        txtId.setToolTipText("This field is automatically populated");
         txtId.setEnabled(false);
         PanelId.add(txtId, java.awt.BorderLayout.CENTER);
 
@@ -443,6 +447,8 @@ public class ContactView extends javax.swing.JFrame {
         lblUsername.setForeground(new java.awt.Color(255, 255, 255));
         lblUsername.setText("Name");
         PanelUsername.add(lblUsername, java.awt.BorderLayout.PAGE_START);
+
+        txtName.setToolTipText("Enter your name");
         PanelUsername.add(txtName, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelUsername);
@@ -456,6 +462,8 @@ public class ContactView extends javax.swing.JFrame {
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
         lblPassword.setText("Phone");
         PanelPassword.add(lblPassword, java.awt.BorderLayout.PAGE_START);
+
+        txtPhone.setToolTipText("Enter your phone");
         PanelPassword.add(txtPhone, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelPassword);
@@ -469,6 +477,8 @@ public class ContactView extends javax.swing.JFrame {
         lblFullName.setForeground(new java.awt.Color(255, 255, 255));
         lblFullName.setText("Email");
         PanelFullName.add(lblFullName, java.awt.BorderLayout.PAGE_START);
+
+        txtEmail.setToolTipText("Enter your email");
         PanelFullName.add(txtEmail, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelFullName);
@@ -501,6 +511,7 @@ public class ContactView extends javax.swing.JFrame {
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
         btnSave.setText("Save");
+        btnSave.setToolTipText("Save button");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -510,6 +521,7 @@ public class ContactView extends javax.swing.JFrame {
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/delete.png"))); // NOI18N
         btnDelete.setText("Delete");
+        btnDelete.setToolTipText("Delete button");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -519,6 +531,7 @@ public class ContactView extends javax.swing.JFrame {
 
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/update.png"))); // NOI18N
         btnUpdate.setText("Update");
+        btnUpdate.setToolTipText("Update button");
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -598,8 +611,11 @@ public class ContactView extends javax.swing.JFrame {
         });
         sPTableAdmins.setViewportView(tableContacts);
 
+        txtSearch.setToolTipText("Enter a name to search");
+
         lblSearch.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/search.png"))); // NOI18N
+        lblSearch.setToolTipText("Search button");
         lblSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblSearch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -609,6 +625,7 @@ public class ContactView extends javax.swing.JFrame {
 
         lblReload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/reload.png"))); // NOI18N
+        lblReload.setToolTipText("Cancel all operations");
         lblReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblReload.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -618,6 +635,7 @@ public class ContactView extends javax.swing.JFrame {
 
         lblView.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/view.png"))); // NOI18N
+        lblView.setToolTipText("View contact details");
         lblView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblView.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
