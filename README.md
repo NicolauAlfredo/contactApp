@@ -19,8 +19,6 @@
 
 ## Screenshots
 
-> _Place these screenshots in a folder like `assets/screenshots/` and embed them below:_
-
 | Login View | Admin Dashboard | Contact Details |
 |------------|-----------------|-----------------|
 | ![Login](assets/screenshots/login.png) | ![Admin](assets/screenshots/admin.png) | ![Contact](assets/screenshots/details.png) |
