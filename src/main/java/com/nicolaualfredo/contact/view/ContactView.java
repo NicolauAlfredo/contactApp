@@ -13,7 +13,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -67,6 +66,7 @@ public class ContactView extends javax.swing.JFrame {
 
         if (name.isEmpty()) {
             showTemporaryMessage(lblMessageSearch, "Please enter a name to search.", 5000);
+            loadContacts();
             return;
         }
 
@@ -80,7 +80,8 @@ public class ContactView extends javax.swing.JFrame {
                 contact.getEmailContact()
             });
         } else {
-            showTemporaryMessage(lblMessageSearch, "No contact found with that name.", 5000);
+            showTemporaryMessage(lblMessageSearch, "No Contact found.", 5000);
+            loadContacts();
         }
     }
 
@@ -236,6 +237,27 @@ public class ContactView extends javax.swing.JFrame {
         }
     }
 
+    private void showContactDetails() {
+        int selectedRow = tableContacts.getSelectedRow();
+
+        if (selectedRow != -1) {
+            int contactId = (int) tableContacts.getValueAt(selectedRow, 0);
+
+            ContactController controller = new ContactController();
+            Contact contact = controller.getContactById(contactId);
+
+            if (contact != null) {
+                ContactDetailsView view = new ContactDetailsView(this, true);
+                view.setContact(contact);
+                view.setVisible(true);
+            } else {
+                showTemporaryMessage(lblMessage, "Contact not found!", 5000);
+            }
+        } else {
+            showTemporaryMessage(lblMessage, "Select a contact from the table.", 5000);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -283,6 +305,7 @@ public class ContactView extends javax.swing.JFrame {
         txtSearch = new javax.swing.JTextField();
         lblSearch = new javax.swing.JLabel();
         lblReload = new javax.swing.JLabel();
+        lblView = new javax.swing.JLabel();
         lblMessageSearch = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -461,6 +484,7 @@ public class ContactView extends javax.swing.JFrame {
         PanelEmail.add(lblEmail, java.awt.BorderLayout.PAGE_START);
 
         btnSelectPhoto.setText("Select Photo");
+        btnSelectPhoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelectPhoto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnSelectPhotoMouseClicked(evt);
@@ -585,13 +609,23 @@ public class ContactView extends javax.swing.JFrame {
 
         lblReload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/reload.png"))); // NOI18N
+        lblReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblReload.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblReloadMouseClicked(evt);
             }
         });
 
-        lblMessageSearch.setFont(new java.awt.Font("Sitka Text", 0, 13)); // NOI18N
+        lblView.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/view.png"))); // NOI18N
+        lblView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblView.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblViewMouseClicked(evt);
+            }
+        });
+
+        lblMessageSearch.setFont(new java.awt.Font("Sitka Text", 0, 12)); // NOI18N
         lblMessageSearch.setForeground(new java.awt.Color(53, 123, 244));
         lblMessageSearch.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
@@ -604,6 +638,8 @@ public class ContactView extends javax.swing.JFrame {
                 .addGroup(PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelTableLayout.createSequentialGroup()
                         .addComponent(lblReload, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblView, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblMessageSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -619,12 +655,15 @@ public class ContactView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblReload, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lblMessageSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(PanelTableLayout.createSequentialGroup()
+                        .addGroup(PanelTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblMessageSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(4, 4, 4))
+                    .addComponent(lblView, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                .addComponent(sPTableAdmins, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -687,6 +726,11 @@ public class ContactView extends javax.swing.JFrame {
         selectPhoto();
     }//GEN-LAST:event_btnSelectPhotoMouseClicked
 
+    private void lblViewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblViewMouseClicked
+        // TODO add your handling code here:
+        showContactDetails();
+    }//GEN-LAST:event_lblViewMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -740,6 +784,7 @@ public class ContactView extends javax.swing.JFrame {
     private javax.swing.JLabel lblReload;
     private javax.swing.JLabel lblSearch;
     private javax.swing.JLabel lblUsername;
+    private javax.swing.JLabel lblView;
     private javax.swing.JScrollPane sPTableAdmins;
     private javax.swing.JPanel subPanelButtons;
     private javax.swing.JPanel subPanelForm;
