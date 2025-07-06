@@ -425,7 +425,7 @@ public class ContactView extends javax.swing.JFrame {
         PanelHeader.setLayout(PanelHeaderLayout);
         PanelHeaderLayout.setHorizontalGroup(
             PanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(subPanelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 1171, Short.MAX_VALUE)
+            .addComponent(subPanelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         PanelHeaderLayout.setVerticalGroup(
             PanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -700,7 +700,7 @@ public class ContactView extends javax.swing.JFrame {
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE))
+                    .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE))
                 .addContainerGap())
         );
         PanelTableLayout.setVerticalGroup(
