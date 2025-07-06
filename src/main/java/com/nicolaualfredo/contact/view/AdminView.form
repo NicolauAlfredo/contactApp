@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="resizable" type="boolean" value="false"/>
@@ -110,6 +110,7 @@
                   <Image iconType="3" name="/icons/admin_menu.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="ADMIN"/>
+                <Property name="toolTipText" type="java.lang.String" value="Go to Admin page"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Cursore mano"/>
                 </Property>
@@ -139,6 +140,7 @@
                   <Image iconType="3" name="/icons/contact_menu.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="CONTACT"/>
+                <Property name="toolTipText" type="java.lang.String" value="Go to Contact page"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Cursore mano"/>
                 </Property>
@@ -157,6 +159,7 @@
                   <Image iconType="3" name="/icons/about.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="ABOUT US"/>
+                <Property name="toolTipText" type="java.lang.String" value="Find out more about us"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Cursore mano"/>
                 </Property>
@@ -267,6 +270,7 @@
                 <Component class="javax.swing.JTextField" name="txtId">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
+                    <Property name="toolTipText" type="java.lang.String" value="This field is automatically populated"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
@@ -309,6 +313,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtUsername">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Enter your username"/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>
@@ -349,6 +356,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtPassword">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Enter your password"/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>
@@ -389,6 +399,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFullName">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Enter your full name"/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>
@@ -429,6 +442,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtEmail">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Enter your email"/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>
@@ -484,6 +500,7 @@
                   <Image iconType="3" name="/icons/save.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Save"/>
+                <Property name="toolTipText" type="java.lang.String" value="Save button"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Cursore mano"/>
                 </Property>
@@ -498,6 +515,7 @@
                   <Image iconType="3" name="/icons/delete.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Delete"/>
+                <Property name="toolTipText" type="java.lang.String" value="Delete button"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Cursore mano"/>
                 </Property>
@@ -512,6 +530,7 @@
                   <Image iconType="3" name="/icons/update.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Update"/>
+                <Property name="toolTipText" type="java.lang.String" value="Update button"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Cursore mano"/>
                 </Property>
@@ -675,6 +694,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/icons/search.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Search button"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Cursore mano"/>
             </Property>
@@ -695,12 +715,19 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtSearch">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Enter a username to search"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/icons/reload.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Cancel all operations"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Cursore mano"/>
             </Property>
           </Properties>
           <Events>

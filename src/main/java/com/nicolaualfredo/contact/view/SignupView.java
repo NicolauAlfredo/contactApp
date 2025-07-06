@@ -8,14 +8,14 @@ package com.nicolaualfredo.contact.view;
  *
  * @author Nicolau Alfredo
  */
-public class Signup extends javax.swing.JFrame {
+public class SignupView extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Signup.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SignupView.class.getName());
 
     /**
      * Creates new form f
      */
-    public Signup() {
+    public SignupView() {
         initComponents();
     }
 
@@ -165,10 +165,6 @@ public class Signup extends javax.swing.JFrame {
         lblFullName.setMinimumSize(new java.awt.Dimension(30, 20));
         lblFullName.setPreferredSize(new java.awt.Dimension(30, 20));
         panelFullName.add(lblFullName, java.awt.BorderLayout.PAGE_START);
-
-        txtFullName.setPreferredSize(new java.awt.Dimension(64, 22));
-        txtFullName.setSelectionEnd(0);
-        txtFullName.setSelectionStart(0);
         panelFullName.add(txtFullName, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(panelFullName);
@@ -279,7 +275,7 @@ public class Signup extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Signup().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new SignupView().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

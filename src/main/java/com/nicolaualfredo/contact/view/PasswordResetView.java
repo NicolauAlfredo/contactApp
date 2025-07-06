@@ -8,14 +8,14 @@ package com.nicolaualfredo.contact.view;
  *
  * @author Nicolau Alfredo
  */
-public class PasswordReset extends javax.swing.JFrame {
+public class PasswordResetView extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PasswordReset.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PasswordResetView.class.getName());
 
     /**
      * Creates new form PasswordReset
      */
-    public PasswordReset() {
+    public PasswordResetView() {
         initComponents();
     }
 
@@ -53,7 +53,6 @@ public class PasswordReset extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Password Reset");
-        setPreferredSize(new java.awt.Dimension(600, 500));
         setResizable(false);
 
         PanelLogo.setBackground(new java.awt.Color(53, 123, 244));
@@ -252,7 +251,7 @@ public class PasswordReset extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new PasswordReset().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new PasswordResetView().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
