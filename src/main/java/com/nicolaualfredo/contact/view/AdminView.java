@@ -9,6 +9,8 @@ import com.nicolaualfredo.contact.model.Admin;
 import com.nicolaualfredo.contact.util.PasswordUtil;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
@@ -181,19 +183,6 @@ public class AdminView extends javax.swing.JFrame {
         checkIdField();
     }
 
-    private boolean validateFields() {
-        if (txtUsername.getText().trim().isEmpty()
-                || txtPassword.getText().trim().isEmpty()
-                || txtFullName.getText().trim().isEmpty()
-                || txtEmail.getText().trim().isEmpty()) {
-
-            showTemporaryMessage(lblMessage, "Please fill in all required fields.", 5000);
-            return false;
-        }
-        checkIdField();
-        return true;
-    }
-
     public void showTemporaryMessage(JLabel label, String message, int durationMillis) {
         label.setText(message);
 
@@ -210,6 +199,57 @@ public class AdminView extends javax.swing.JFrame {
         }
     }
 
+    public boolean isValidUsername(String username) {
+        String usernameRegex = "^[a-zA-Z][a-zA-Z0-9._]{2,19}$";
+        if (username == null) {
+            return false;
+        }
+        return username.matches(usernameRegex);
+    }
+
+    public boolean isValidPassword(String password) {
+        if (password == null) {
+            return false;
+        }
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()\\-+]).{8,30}$";
+        return password.matches(passwordRegex);
+    }
+
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        if (email == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private boolean validateFields() {
+        if (!isValidUsername(txtUsername.getText().trim())) {
+            showTemporaryMessage(lblMessage, "Invalid username format.", 5000);
+            return false;
+        }
+
+        if (!isValidPassword(txtPassword.getText().trim())) {
+            showTemporaryMessage(lblMessage, "Password does not meet criteria.", 5000);
+            return false;
+        }
+
+        if (txtFullName.getText().trim().isEmpty()) {
+            showTemporaryMessage(lblMessage, "Full Name is required.", 5000);
+            return false;
+        }
+
+        if (!isValidEmail(txtEmail.getText().trim())) {
+            showTemporaryMessage(lblMessage, "Invalid email format.", 5000);
+            return false;
+        }
+
+        checkIdField();
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -223,8 +263,9 @@ public class AdminView extends javax.swing.JFrame {
         subPanelMenu = new javax.swing.JPanel();
         lblAdmin = new javax.swing.JLabel();
         Separator = new javax.swing.JSeparator();
+        lblAboutUS1 = new javax.swing.JLabel();
         lblContact = new javax.swing.JLabel();
-        lblAboutUS = new javax.swing.JLabel();
+        lblLogout = new javax.swing.JLabel();
         PanelForm = new javax.swing.JPanel();
         subPanelHeader = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
@@ -259,7 +300,7 @@ public class AdminView extends javax.swing.JFrame {
         txtSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         PanelHeader.setBackground(new java.awt.Color(255, 255, 255));
@@ -285,6 +326,18 @@ public class AdminView extends javax.swing.JFrame {
         Separator.setForeground(new java.awt.Color(53, 123, 244));
         Separator.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
+        lblAboutUS1.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
+        lblAboutUS1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAboutUS1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/about.png"))); // NOI18N
+        lblAboutUS1.setText("ABOUT US");
+        lblAboutUS1.setToolTipText("Find out more about us");
+        lblAboutUS1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblAboutUS1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAboutUS1MouseClicked(evt);
+            }
+        });
+
         lblContact.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
         lblContact.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblContact.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/contact_menu.png"))); // NOI18N
@@ -297,15 +350,14 @@ public class AdminView extends javax.swing.JFrame {
             }
         });
 
-        lblAboutUS.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
-        lblAboutUS.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblAboutUS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/about.png"))); // NOI18N
-        lblAboutUS.setText("ABOUT US");
-        lblAboutUS.setToolTipText("Find out more about us");
-        lblAboutUS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblAboutUS.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblLogout.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
+        lblLogout.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logout.png"))); // NOI18N
+        lblLogout.setToolTipText("Logout");
+        lblLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblLogout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblAboutUSMouseClicked(evt);
+                lblLogoutMouseClicked(evt);
             }
         });
 
@@ -321,18 +373,21 @@ public class AdminView extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(lblContact, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblAboutUS, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAboutUS1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         subPanelMenuLayout.setVerticalGroup(
             subPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, subPanelMenuLayout.createSequentialGroup()
+            .addGroup(subPanelMenuLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(subPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblAdmin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(Separator, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblContact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblAboutUS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(subPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(Separator)
+                    .addComponent(lblLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblAboutUS1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblContact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -398,7 +453,7 @@ public class AdminView extends javax.swing.JFrame {
         lblUsername.setText("Username");
         PanelUsername.add(lblUsername, java.awt.BorderLayout.PAGE_START);
 
-        txtUsername.setToolTipText("Enter your username");
+        txtUsername.setToolTipText("Use 3-20 characters: letters, numbers, dot or underscore, starting with a letter.");
         PanelUsername.add(txtUsername, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelUsername);
@@ -413,7 +468,7 @@ public class AdminView extends javax.swing.JFrame {
         lblPassword.setText("Password");
         PanelPassword.add(lblPassword, java.awt.BorderLayout.PAGE_START);
 
-        txtPassword.setToolTipText("Enter your password");
+        txtPassword.setToolTipText("Password must be 8-30 characters long and include uppercase, lowercase, number, and special character.");
         PanelPassword.add(txtPassword, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelPassword);
@@ -428,7 +483,7 @@ public class AdminView extends javax.swing.JFrame {
         lblFullName.setText("Full Name");
         PanelFullName.add(lblFullName, java.awt.BorderLayout.PAGE_START);
 
-        txtFullName.setToolTipText("Enter your full name");
+        txtFullName.setToolTipText("Full Name is required. ");
         PanelFullName.add(txtFullName, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelFullName);
@@ -443,7 +498,7 @@ public class AdminView extends javax.swing.JFrame {
         lblEmail.setText("Email");
         PanelEmail.add(lblEmail, java.awt.BorderLayout.PAGE_START);
 
-        txtEmail.setToolTipText("Enter your email");
+        txtEmail.setToolTipText("Please enter a valid email address.");
         PanelEmail.add(txtEmail, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelEmail);
@@ -630,10 +685,11 @@ public class AdminView extends javax.swing.JFrame {
         AdminView.this.dispose();
     }//GEN-LAST:event_lblContactMouseClicked
 
-    private void lblAboutUSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAboutUSMouseClicked
+    private void lblLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogoutMouseClicked
         // TODO add your handling code here:
-        showTemporaryMessage(lblMessage, "Come soon!!", 5000);
-    }//GEN-LAST:event_lblAboutUSMouseClicked
+        new LoginView().setVisible(true);
+        AdminView.this.dispose();
+    }//GEN-LAST:event_lblLogoutMouseClicked
 
     private void lblSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSearchMouseClicked
         // TODO add your handling code here:
@@ -666,6 +722,10 @@ public class AdminView extends javax.swing.JFrame {
         loadAdmins();
         btnSave.setEnabled(true);
     }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void lblAboutUS1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAboutUS1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblAboutUS1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -706,7 +766,7 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel lblAboutUS;
+    private javax.swing.JLabel lblAboutUS1;
     private javax.swing.JLabel lblAdmin;
     private javax.swing.JLabel lblAdministraction;
     private javax.swing.JLabel lblContact;
@@ -714,6 +774,7 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JLabel lblEmail1;
     private javax.swing.JLabel lblFullName;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblLogout;
     private javax.swing.JLabel lblMessage;
     private javax.swing.JLabel lblMessageSearch;
     private javax.swing.JLabel lblPassword;

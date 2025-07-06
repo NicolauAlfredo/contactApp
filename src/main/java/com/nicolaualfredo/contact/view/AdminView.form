@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
@@ -76,20 +76,23 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="lblContact" min="-2" pref="125" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="lblAboutUS" min="-2" pref="125" max="-2" attributes="0"/>
+                      <Component id="lblAboutUS1" min="-2" pref="125" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblLogout" min="-2" pref="29" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblAdmin" alignment="0" pref="38" max="32767" attributes="0"/>
                           <Component id="Separator" alignment="0" max="32767" attributes="0"/>
-                          <Component id="lblContact" alignment="1" max="32767" attributes="0"/>
-                          <Component id="lblAboutUS" alignment="1" max="32767" attributes="0"/>
+                          <Component id="lblLogout" alignment="1" max="32767" attributes="0"/>
+                          <Component id="lblAboutUS1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblContact" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -130,6 +133,25 @@
                 <Property name="orientation" type="int" value="1"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JLabel" name="lblAboutUS1">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI Black" size="12" style="1"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/icons/about.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="ABOUT US"/>
+                <Property name="toolTipText" type="java.lang.String" value="Find out more about us"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Cursore mano"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblAboutUS1MouseClicked"/>
+              </Events>
+            </Component>
             <Component class="javax.swing.JLabel" name="lblContact">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -149,23 +171,22 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblContactMouseClicked"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblAboutUS">
+            <Component class="javax.swing.JLabel" name="lblLogout">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Black" size="12" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/icons/about.png"/>
+                  <Image iconType="3" name="/icons/logout.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="ABOUT US"/>
-                <Property name="toolTipText" type="java.lang.String" value="Find out more about us"/>
+                <Property name="toolTipText" type="java.lang.String" value="Logout"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Cursore mano"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblAboutUSMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblLogoutMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>
@@ -314,7 +335,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtUsername">
                   <Properties>
-                    <Property name="toolTipText" type="java.lang.String" value="Enter your username"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Use 3-20 characters: letters, numbers, dot or underscore, starting with a letter."/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -357,7 +378,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtPassword">
                   <Properties>
-                    <Property name="toolTipText" type="java.lang.String" value="Enter your password"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Password must be 8-30 characters long and include uppercase, lowercase, number, and special character."/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -400,7 +421,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFullName">
                   <Properties>
-                    <Property name="toolTipText" type="java.lang.String" value="Enter your full name"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Full Name is required. "/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -443,7 +464,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtEmail">
                   <Properties>
-                    <Property name="toolTipText" type="java.lang.String" value="Enter your email"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Please enter a valid email address."/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">

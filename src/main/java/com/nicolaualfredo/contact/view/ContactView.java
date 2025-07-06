@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.Timer;
@@ -209,18 +211,6 @@ public class ContactView extends javax.swing.JFrame {
         txtPhone.setText("");
     }
 
-    private boolean validateFields() {
-        if (txtName.getText().trim().isEmpty()
-                || txtPhone.getText().trim().isEmpty()
-                || txtEmail.getText().trim().isEmpty()) {
-
-            showTemporaryMessage(lblMessage, "Please fill in all required fields.", 5000);
-            return false;
-        }
-        checkIdField();
-        return true;
-    }
-
     public void showTemporaryMessage(JLabel label, String message, int durationMillis) {
         label.setText(message);
 
@@ -258,6 +248,36 @@ public class ContactView extends javax.swing.JFrame {
         }
     }
 
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        if (email == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private boolean validateFields() {
+        if (txtName.getText().trim().isEmpty()) {
+            showTemporaryMessage(lblMessage, "Full Name is required.", 5000);
+            return false;
+        }
+
+        if (txtPhone.getText().trim().isEmpty()) {
+            showTemporaryMessage(lblMessage, "Phone is required.", 5000);
+            return false;
+        }
+
+        if (!isValidEmail(txtEmail.getText().trim())) {
+            showTemporaryMessage(lblMessage, "Invalid email format.", 5000);
+            return false;
+        }
+
+        checkIdField();
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -273,6 +293,7 @@ public class ContactView extends javax.swing.JFrame {
         Separator = new javax.swing.JSeparator();
         lblContact = new javax.swing.JLabel();
         lblAboutUS = new javax.swing.JLabel();
+        lblLogout = new javax.swing.JLabel();
         PanelForm = new javax.swing.JPanel();
         subPanelHeader = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
@@ -359,6 +380,17 @@ public class ContactView extends javax.swing.JFrame {
             }
         });
 
+        lblLogout.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
+        lblLogout.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logout.png"))); // NOI18N
+        lblLogout.setToolTipText("Logout");
+        lblLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLogoutMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout subPanelMenuLayout = new javax.swing.GroupLayout(subPanelMenu);
         subPanelMenu.setLayout(subPanelMenuLayout);
         subPanelMenuLayout.setHorizontalGroup(
@@ -372,17 +404,20 @@ public class ContactView extends javax.swing.JFrame {
                 .addComponent(lblContact, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblAboutUS, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         subPanelMenuLayout.setVerticalGroup(
             subPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, subPanelMenuLayout.createSequentialGroup()
+            .addGroup(subPanelMenuLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(subPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblAdmin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(Separator, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblContact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblAboutUS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(subPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblLogout, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(lblAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Separator)
+                    .addComponent(lblAboutUS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblContact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -390,7 +425,7 @@ public class ContactView extends javax.swing.JFrame {
         PanelHeader.setLayout(PanelHeaderLayout);
         PanelHeaderLayout.setHorizontalGroup(
             PanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(subPanelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(subPanelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 1171, Short.MAX_VALUE)
         );
         PanelHeaderLayout.setVerticalGroup(
             PanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -448,7 +483,7 @@ public class ContactView extends javax.swing.JFrame {
         lblUsername.setText("Name");
         PanelUsername.add(lblUsername, java.awt.BorderLayout.PAGE_START);
 
-        txtName.setToolTipText("Enter your name");
+        txtName.setToolTipText("Full Name is required.");
         PanelUsername.add(txtName, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelUsername);
@@ -463,7 +498,7 @@ public class ContactView extends javax.swing.JFrame {
         lblPassword.setText("Phone");
         PanelPassword.add(lblPassword, java.awt.BorderLayout.PAGE_START);
 
-        txtPhone.setToolTipText("Enter your phone");
+        txtPhone.setToolTipText("Phone is required.");
         PanelPassword.add(txtPhone, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelPassword);
@@ -478,7 +513,7 @@ public class ContactView extends javax.swing.JFrame {
         lblFullName.setText("Email");
         PanelFullName.add(lblFullName, java.awt.BorderLayout.PAGE_START);
 
-        txtEmail.setToolTipText("Enter your email");
+        txtEmail.setToolTipText("Invalid email format.");
         PanelFullName.add(txtEmail, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelFullName);
@@ -494,6 +529,7 @@ public class ContactView extends javax.swing.JFrame {
         PanelEmail.add(lblEmail, java.awt.BorderLayout.PAGE_START);
 
         btnSelectPhoto.setText("Select Photo");
+        btnSelectPhoto.setToolTipText("");
         btnSelectPhoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelectPhoto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -664,7 +700,7 @@ public class ContactView extends javax.swing.JFrame {
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE))
+                    .addComponent(sPTableAdmins, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE))
                 .addContainerGap())
         );
         PanelTableLayout.setVerticalGroup(
@@ -749,6 +785,12 @@ public class ContactView extends javax.swing.JFrame {
         showContactDetails();
     }//GEN-LAST:event_lblViewMouseClicked
 
+    private void lblLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogoutMouseClicked
+        // TODO add your handling code here:
+        new LoginView().setVisible(true);
+        ContactView.this.dispose();
+    }//GEN-LAST:event_lblLogoutMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -796,6 +838,7 @@ public class ContactView extends javax.swing.JFrame {
     private javax.swing.JLabel lblEmail1;
     private javax.swing.JLabel lblFullName;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblLogout;
     private javax.swing.JLabel lblMessage;
     private javax.swing.JLabel lblMessageSearch;
     private javax.swing.JLabel lblPassword;

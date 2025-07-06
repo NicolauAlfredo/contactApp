@@ -209,6 +209,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtUsername">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Use 3-20 characters: letters, numbers, dot or underscore, starting with a letter."/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>
@@ -252,6 +255,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtPassword">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Password must be 8-30 characters long and include uppercase, lowercase, number, and special character."/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>
@@ -295,6 +301,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFullName">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Full Name is required. "/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>
@@ -338,6 +347,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtEmail">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Please enter a valid email address."/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                       <BorderConstraints direction="Center"/>

@@ -8,6 +8,8 @@ import com.nicolaualfredo.contact.controller.AdminController;
 import com.nicolaualfredo.contact.model.Admin;
 import com.nicolaualfredo.contact.util.PasswordUtil;
 import java.sql.Timestamp;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
@@ -34,11 +36,53 @@ public class SignupView extends javax.swing.JFrame {
         timer.start();
     }
 
-    private boolean validateFields() {
-        if (txtUsername.getText().trim().isEmpty() || txtPassword.getText().trim().isEmpty() || txtFullName.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()) {
-            showTemporaryMessage(lblMessage, "Please fill in all required fields.", 5000);
+    public boolean isValidUsername(String username) {
+        String usernameRegex = "^[a-zA-Z][a-zA-Z0-9._]{2,19}$";
+        if (username == null) {
             return false;
         }
+        return username.matches(usernameRegex);
+    }
+
+    public boolean isValidPassword(String password) {
+        if (password == null) {
+            return false;
+        }
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()\\-+]).{8,30}$";
+        return password.matches(passwordRegex);
+    }
+
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        if (email == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private boolean validateFields() {
+        if (!isValidUsername(txtUsername.getText().trim())) {
+            showTemporaryMessage(lblMessage, "Invalid username format.", 5000);
+            return false;
+        }
+
+        if (!isValidPassword(txtPassword.getText().trim())) {
+            showTemporaryMessage(lblMessage, "Password does not meet criteria.", 5000);
+            return false;
+        }
+
+        if (txtFullName.getText().trim().isEmpty()) {
+            showTemporaryMessage(lblMessage, "Full Name is required.", 5000);
+            return false;
+        }
+
+        if (!isValidEmail(txtEmail.getText().trim())) {
+            showTemporaryMessage(lblMessage, "Invalid email format.", 5000);
+            return false;
+        }
+
         return true;
     }
 
@@ -206,6 +250,8 @@ public class SignupView extends javax.swing.JFrame {
         lblUsername.setMinimumSize(new java.awt.Dimension(30, 20));
         lblUsername.setPreferredSize(new java.awt.Dimension(30, 20));
         panelUsername.add(lblUsername, java.awt.BorderLayout.PAGE_START);
+
+        txtUsername.setToolTipText("Use 3-20 characters: letters, numbers, dot or underscore, starting with a letter.");
         panelUsername.add(txtUsername, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(panelUsername);
@@ -220,6 +266,8 @@ public class SignupView extends javax.swing.JFrame {
         lblPassword.setMinimumSize(new java.awt.Dimension(30, 20));
         lblPassword.setPreferredSize(new java.awt.Dimension(30, 20));
         panelPassword.add(lblPassword, java.awt.BorderLayout.PAGE_START);
+
+        txtPassword.setToolTipText("Password must be 8-30 characters long and include uppercase, lowercase, number, and special character.");
         panelPassword.add(txtPassword, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(panelPassword);
@@ -234,6 +282,8 @@ public class SignupView extends javax.swing.JFrame {
         lblFullName.setMinimumSize(new java.awt.Dimension(30, 20));
         lblFullName.setPreferredSize(new java.awt.Dimension(30, 20));
         panelFullName.add(lblFullName, java.awt.BorderLayout.PAGE_START);
+
+        txtFullName.setToolTipText("Full Name is required. ");
         panelFullName.add(txtFullName, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(panelFullName);
@@ -248,6 +298,8 @@ public class SignupView extends javax.swing.JFrame {
         lblEmail.setMinimumSize(new java.awt.Dimension(30, 20));
         lblEmail.setPreferredSize(new java.awt.Dimension(30, 20));
         panelEmail.add(lblEmail, java.awt.BorderLayout.PAGE_START);
+
+        txtEmail.setToolTipText("Please enter a valid email address.");
         panelEmail.add(txtEmail, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(panelEmail);
