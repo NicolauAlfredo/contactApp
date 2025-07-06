@@ -65,4 +65,9 @@ public class AdminController {
         admin.setPassword_has(passwordHash);
         return adminDAO.login(admin);
     }
+
+    public boolean usernameExists(String username) {
+        return getAdminByUsername(username) != null;
+    }
+
 }

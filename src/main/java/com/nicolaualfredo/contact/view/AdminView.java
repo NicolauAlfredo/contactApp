@@ -81,23 +81,28 @@ public class AdminView extends javax.swing.JFrame {
             return;
         }
 
-        Admin admin = new Admin();
         AdminController controller = new AdminController();
+        String username = txtUsername.getText().trim();
 
-        admin.setUsernameAdmin(txtUsername.getText().trim());
-        admin.setPassword_has(PasswordUtil.hash(txtPassword.getText().trim()));
-        admin.setFullName(txtFullName.getText().trim());
-        admin.setEmail(txtEmail.getText());
-        admin.setCreated_at(new Timestamp(System.currentTimeMillis()));
-
-        if (!txtId.getText().isEmpty()) {
-            showTemporaryMessage(lblMessage, "Admin created successfully.", 5000);
+        if (controller.usernameExists(username)) {
+            showTemporaryMessage(lblMessage, "Username already exists. Please choose another one.", 5000);
+            return;
         }
 
-        controller.createAdmin(admin);
-        showTemporaryMessage(lblMessage, "Admin created successfully.", 5000);
-        clearFields();
-        loadAdmins();
+        Admin admin = new Admin();
+        admin.setUsernameAdmin(username);
+        admin.setPassword_has(PasswordUtil.hash(txtPassword.getText().trim()));
+        admin.setFullName(txtFullName.getText().trim());
+        admin.setEmail(txtEmail.getText().trim());
+        admin.setCreated_at(new Timestamp(System.currentTimeMillis()));
+
+        if (controller.createAdmin(admin)) {
+            showTemporaryMessage(lblMessage, "Admin created successfully.", 5000);
+            clearFields();
+            loadAdmins();
+        } else {
+            showTemporaryMessage(lblMessage, "Failed to create admin. Please try again.", 5000);
+        }
     }
 
     private void updateAdmin() {

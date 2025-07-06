@@ -4,12 +4,19 @@
  */
 package com.nicolaualfredo.contact.view;
 
+import com.nicolaualfredo.contact.controller.AdminController;
+import com.nicolaualfredo.contact.model.Admin;
+import com.nicolaualfredo.contact.util.PasswordUtil;
+import java.sql.Timestamp;
+import javax.swing.JLabel;
+import javax.swing.Timer;
+
 /**
  *
  * @author Nicolau Alfredo
  */
 public class SignupView extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SignupView.class.getName());
 
     /**
@@ -17,6 +24,57 @@ public class SignupView extends javax.swing.JFrame {
      */
     public SignupView() {
         initComponents();
+    }
+
+    public void showTemporaryMessage(JLabel label, String message, int durationMillis) {
+        label.setText(message);
+
+        Timer timer = new Timer(durationMillis, e -> label.setText(""));
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    private boolean validateFields() {
+        if (txtUsername.getText().trim().isEmpty() || txtPassword.getText().trim().isEmpty() || txtFullName.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()) {
+            showTemporaryMessage(lblMessage, "Please fill in all required fields.", 5000);
+            return false;
+        }
+        return true;
+    }
+
+    private void clearFields() {
+        txtUsername.setText("");
+        txtPassword.setText("");
+        txtFullName.setText("");
+        txtEmail.setText("");
+    }
+
+    private void signUp() {
+        if (!validateFields()) {
+            return;
+        }
+
+        String username = txtUsername.getText().trim();
+        AdminController controller = new AdminController();
+
+        if (controller.usernameExists(username)) {
+            showTemporaryMessage(lblMessage, "Username already exists. Please choose another one.", 5000);
+            return;
+        }
+
+        Admin admin = new Admin();
+        admin.setUsernameAdmin(username);
+        admin.setPassword_has(PasswordUtil.hash(txtPassword.getText().trim()));
+        admin.setFullName(txtFullName.getText().trim());
+        admin.setEmail(txtEmail.getText().trim());
+        admin.setCreated_at(new Timestamp(System.currentTimeMillis()));
+
+        if (controller.createAdmin(admin)) {
+            showTemporaryMessage(lblMessage, "Admin created successfully.", 5000);
+            clearFields();
+        } else {
+            showTemporaryMessage(lblMessage, "Failed to create admin. Please try again.", 5000);
+        }
     }
 
     /**
@@ -31,6 +89,7 @@ public class SignupView extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         PanelJoinUs = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
+        lblMessage = new javax.swing.JLabel();
         PanelSignUp = new javax.swing.JPanel();
         subPanelSignUp = new javax.swing.JPanel();
         lblSignUp = new javax.swing.JLabel();
@@ -49,6 +108,8 @@ public class SignupView extends javax.swing.JFrame {
         txtEmail = new javax.swing.JTextField();
         subPanelButton = new javax.swing.JPanel();
         btnSignUp = new javax.swing.JButton();
+        subPanelLogin = new javax.swing.JPanel();
+        lblLogin = new javax.swing.JLabel();
         subPanelSocial = new javax.swing.JPanel();
         lblOr = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -76,13 +137,19 @@ public class SignupView extends javax.swing.JFrame {
         lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/upload.png"))); // NOI18N
 
+        lblMessage.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
+        lblMessage.setForeground(new java.awt.Color(255, 255, 255));
+        lblMessage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout PanelJoinUsLayout = new javax.swing.GroupLayout(PanelJoinUs);
         PanelJoinUs.setLayout(PanelJoinUsLayout);
         PanelJoinUsLayout.setHorizontalGroup(
             PanelJoinUsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelJoinUsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(PanelJoinUsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         PanelJoinUsLayout.setVerticalGroup(
@@ -90,6 +157,8 @@ public class SignupView extends javax.swing.JFrame {
             .addGroup(PanelJoinUsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -186,13 +255,18 @@ public class SignupView extends javax.swing.JFrame {
         PanelSignUp.add(subPanelForm);
 
         subPanelButton.setBackground(new java.awt.Color(255, 255, 255));
-        subPanelButton.setPreferredSize(new java.awt.Dimension(400, 60));
+        subPanelButton.setPreferredSize(new java.awt.Dimension(400, 50));
 
         btnSignUp.setBackground(new java.awt.Color(53, 123, 244));
         btnSignUp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnSignUp.setForeground(new java.awt.Color(255, 255, 255));
         btnSignUp.setText("SIGN UP");
         btnSignUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSignUp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSignUpMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout subPanelButtonLayout = new javax.swing.GroupLayout(subPanelButton);
         subPanelButton.setLayout(subPanelButtonLayout);
@@ -200,47 +274,94 @@ public class SignupView extends javax.swing.JFrame {
             subPanelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, subPanelButtonLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addComponent(btnSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         subPanelButtonLayout.setVerticalGroup(
             subPanelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(subPanelButtonLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addComponent(btnSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         PanelSignUp.add(subPanelButton);
 
-        subPanelSocial.setBackground(new java.awt.Color(255, 255, 255));
-        subPanelSocial.setPreferredSize(new java.awt.Dimension(400, 200));
+        subPanelLogin.setBackground(new java.awt.Color(255, 255, 255));
+        subPanelLogin.setPreferredSize(new java.awt.Dimension(400, 30));
 
-        lblOr.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblLogin.setForeground(new java.awt.Color(53, 123, 244));
+        lblLogin.setText("Log In");
+        lblLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLoginMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout subPanelLoginLayout = new javax.swing.GroupLayout(subPanelLogin);
+        subPanelLogin.setLayout(subPanelLoginLayout);
+        subPanelLoginLayout.setHorizontalGroup(
+            subPanelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(subPanelLoginLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        subPanelLoginLayout.setVerticalGroup(
+            subPanelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(subPanelLoginLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblLogin)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        PanelSignUp.add(subPanelLogin);
+
+        subPanelSocial.setBackground(new java.awt.Color(255, 255, 255));
+        subPanelSocial.setPreferredSize(new java.awt.Dimension(400, 180));
+
+        lblOr.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblOr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblOr.setText("or signup with");
-        lblOr.setPreferredSize(new java.awt.Dimension(400, 25));
+        lblOr.setPreferredSize(new java.awt.Dimension(400, 22));
         subPanelSocial.add(lblOr);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setPreferredSize(new java.awt.Dimension(400, 100));
+        jPanel2.setPreferredSize(new java.awt.Dimension(400, 80));
 
         lblFacebook.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblFacebook.setIcon(new javax.swing.ImageIcon("C:\\Users\\Nicolau Alfredo\\Documents\\NetBeansProjects\\contactApp\\src\\main\\resources\\icons\\facebook.png")); // NOI18N
         lblFacebook.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblFacebook.setPreferredSize(new java.awt.Dimension(80, 80));
+        lblFacebook.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblFacebookMouseClicked(evt);
+            }
+        });
         jPanel2.add(lblFacebook);
 
         lblGoogle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblGoogle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/google.png"))); // NOI18N
         lblGoogle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblGoogle.setPreferredSize(new java.awt.Dimension(80, 80));
+        lblGoogle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblGoogleMouseClicked(evt);
+            }
+        });
         jPanel2.add(lblGoogle);
 
         lblGitHub.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblGitHub.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/github.png"))); // NOI18N
         lblGitHub.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblGitHub.setPreferredSize(new java.awt.Dimension(80, 80));
+        lblGitHub.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblGitHubMouseClicked(evt);
+            }
+        });
         jPanel2.add(lblGitHub);
 
         subPanelSocial.add(jPanel2);
@@ -252,6 +373,32 @@ public class SignupView extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignUpMouseClicked
+        // TODO add your handling code here:
+        signUp();
+    }//GEN-LAST:event_btnSignUpMouseClicked
+
+    private void lblLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLoginMouseClicked
+        // TODO add your handling code here:
+        new LoginView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblLoginMouseClicked
+
+    private void lblFacebookMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblFacebookMouseClicked
+        // TODO add your handling code here:
+        showTemporaryMessage(lblMessage, "Come soon!!", 5000);
+    }//GEN-LAST:event_lblFacebookMouseClicked
+
+    private void lblGoogleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGoogleMouseClicked
+        // TODO add your handling code here:
+        showTemporaryMessage(lblMessage, "Come soon!!", 5000);
+    }//GEN-LAST:event_lblGoogleMouseClicked
+
+    private void lblGitHubMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGitHubMouseClicked
+        // TODO add your handling code here:
+        showTemporaryMessage(lblMessage, "Come soon!!", 5000);
+    }//GEN-LAST:event_lblGitHubMouseClicked
 
     /**
      * @param args the command line arguments
@@ -289,7 +436,9 @@ public class SignupView extends javax.swing.JFrame {
     private javax.swing.JLabel lblFullName;
     private javax.swing.JLabel lblGitHub;
     private javax.swing.JLabel lblGoogle;
+    private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblMessage;
     private javax.swing.JLabel lblOr;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblSignUp;
@@ -300,6 +449,7 @@ public class SignupView extends javax.swing.JFrame {
     private javax.swing.JPanel panelUsername;
     private javax.swing.JPanel subPanelButton;
     private javax.swing.JPanel subPanelForm;
+    private javax.swing.JPanel subPanelLogin;
     private javax.swing.JPanel subPanelSignUp;
     private javax.swing.JPanel subPanelSocial;
     private javax.swing.JTextField txtEmail;
