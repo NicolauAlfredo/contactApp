@@ -4,19 +4,56 @@
  */
 package com.nicolaualfredo.contact.view;
 
+import com.nicolaualfredo.contact.controller.AdminController;
+import com.nicolaualfredo.contact.model.Admin;
+import com.nicolaualfredo.contact.util.PasswordUtil;
+import javax.swing.JLabel;
+import javax.swing.Timer;
+
 /**
  *
  * @author Nicolau Alfredo
  */
-public class Login extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
+public class LoginView extends javax.swing.JFrame {
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginView.class.getName());
 
     /**
      * Creates new form LogInc
      */
-    public Login() {
+    public LoginView() {
         initComponents();
+    }
+
+    public void showTemporaryMessage(JLabel label, String message, int durationMillis) {
+        label.setText(message);
+
+        Timer timer = new Timer(durationMillis, e -> label.setText(""));
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    private boolean doLogin() {
+        String username = txtUsername.getText().trim();
+        String password = new String(txtPassword.getPassword()).trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            showTemporaryMessage(lblMessage, "Please fill in both fields.", 5000);
+            return false;
+        }
+
+        String hashedPassword = PasswordUtil.hash(password);
+        AdminController controller = new AdminController();
+
+        boolean isAuthenticated = controller.authenticateAdmin(username, hashedPassword);
+
+        if (isAuthenticated) {
+            showTemporaryMessage(lblMessage, "Login successful!", 5000);
+            return true;
+        } else {
+            showTemporaryMessage(lblMessage, "Invalid username or password.", 5000);
+            return false;
+        }
     }
 
     /**
@@ -35,19 +72,21 @@ public class Login extends javax.swing.JFrame {
         lblLoginGoogle = new javax.swing.JLabel();
         subPanelForm = new javax.swing.JPanel();
         PanelUsername = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        lblUsername = new javax.swing.JLabel();
+        txtUsername = new javax.swing.JTextField();
         PanelPassword = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        lblPassword = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
         PanelRemember = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jLabel4 = new javax.swing.JLabel();
+        cbRememberMe = new javax.swing.JCheckBox();
+        txtForgotPassword = new javax.swing.JLabel();
         subPanelLogin = new javax.swing.JPanel();
         btnLogin = new javax.swing.JButton();
         subPanelSignUp = new javax.swing.JPanel();
         lblCreateAccount = new javax.swing.JLabel();
         lblSignUp = new javax.swing.JLabel();
+        subPanelMessage = new javax.swing.JPanel();
+        lblMessage = new javax.swing.JLabel();
         PanelWelcomeBack = new javax.swing.JPanel();
         lblWelcome = new javax.swing.JLabel();
         lblText1 = new javax.swing.JLabel();
@@ -105,10 +144,12 @@ public class Login extends javax.swing.JFrame {
         PanelUsername.setBackground(new java.awt.Color(255, 255, 255));
         PanelUsername.setPreferredSize(new java.awt.Dimension(250, 50));
         PanelUsername.setLayout(new java.awt.BorderLayout(4, 4));
-        PanelUsername.add(jTextField1, java.awt.BorderLayout.CENTER);
 
-        jLabel2.setText("Username");
-        PanelUsername.add(jLabel2, java.awt.BorderLayout.PAGE_START);
+        lblUsername.setText("Username");
+        PanelUsername.add(lblUsername, java.awt.BorderLayout.PAGE_START);
+
+        txtUsername.setToolTipText("Enter your username");
+        PanelUsername.add(txtUsername, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelUsername);
 
@@ -116,9 +157,11 @@ public class Login extends javax.swing.JFrame {
         PanelPassword.setPreferredSize(new java.awt.Dimension(250, 50));
         PanelPassword.setLayout(new java.awt.BorderLayout(4, 4));
 
-        jLabel3.setText("Password");
-        PanelPassword.add(jLabel3, java.awt.BorderLayout.PAGE_START);
-        PanelPassword.add(jPasswordField1, java.awt.BorderLayout.CENTER);
+        lblPassword.setText("Password");
+        PanelPassword.add(lblPassword, java.awt.BorderLayout.PAGE_START);
+
+        txtPassword.setToolTipText("Enter your password");
+        PanelPassword.add(txtPassword, java.awt.BorderLayout.CENTER);
 
         subPanelForm.add(PanelPassword);
 
@@ -126,15 +169,25 @@ public class Login extends javax.swing.JFrame {
         PanelRemember.setPreferredSize(new java.awt.Dimension(250, 25));
         PanelRemember.setLayout(new java.awt.BorderLayout());
 
-        jCheckBox1.setText("Remember me");
-        jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        PanelRemember.add(jCheckBox1, java.awt.BorderLayout.WEST);
+        cbRememberMe.setText("Remember me");
+        cbRememberMe.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cbRememberMe.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbRememberMeMouseClicked(evt);
+            }
+        });
+        PanelRemember.add(cbRememberMe, java.awt.BorderLayout.WEST);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(53, 123, 244));
-        jLabel4.setText("Forgot your password?");
-        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        PanelRemember.add(jLabel4, java.awt.BorderLayout.EAST);
+        txtForgotPassword.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtForgotPassword.setForeground(new java.awt.Color(53, 123, 244));
+        txtForgotPassword.setText("Forgot your password?");
+        txtForgotPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txtForgotPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtForgotPasswordMouseClicked(evt);
+            }
+        });
+        PanelRemember.add(txtForgotPassword, java.awt.BorderLayout.EAST);
 
         subPanelForm.add(PanelRemember);
 
@@ -147,8 +200,14 @@ public class Login extends javax.swing.JFrame {
         btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("LOGIN");
+        btnLogin.setToolTipText("");
         btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLogin.setPreferredSize(new java.awt.Dimension(250, 30));
+        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLoginMouseClicked(evt);
+            }
+        });
         subPanelLogin.add(btnLogin);
 
         PanelFom.add(subPanelLogin);
@@ -165,9 +224,40 @@ public class Login extends javax.swing.JFrame {
         lblSignUp.setForeground(new java.awt.Color(53, 123, 244));
         lblSignUp.setText("Sign up.");
         lblSignUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblSignUp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblSignUpMouseClicked(evt);
+            }
+        });
         subPanelSignUp.add(lblSignUp);
 
         PanelFom.add(subPanelSignUp);
+
+        subPanelMessage.setBackground(new java.awt.Color(255, 255, 255));
+        subPanelMessage.setPreferredSize(new java.awt.Dimension(400, 50));
+
+        lblMessage.setFont(new java.awt.Font("Sitka Text", 0, 13)); // NOI18N
+        lblMessage.setForeground(new java.awt.Color(53, 123, 244));
+        lblMessage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout subPanelMessageLayout = new javax.swing.GroupLayout(subPanelMessage);
+        subPanelMessage.setLayout(subPanelMessageLayout);
+        subPanelMessageLayout.setHorizontalGroup(
+            subPanelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(subPanelMessageLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        subPanelMessageLayout.setVerticalGroup(
+            subPanelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(subPanelMessageLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        PanelFom.add(subPanelMessage);
 
         getContentPane().add(PanelFom, java.awt.BorderLayout.WEST);
 
@@ -230,7 +320,33 @@ public class Login extends javax.swing.JFrame {
 
     private void lblLoginGoogleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLoginGoogleMouseClicked
         // TODO add your handling code here:
+        showTemporaryMessage(lblMessage, "Come soon!!", 5000);
     }//GEN-LAST:event_lblLoginGoogleMouseClicked
+
+    private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
+        // TODO add your handling code here:
+        if (doLogin()) {
+            new AdminView().setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnLoginMouseClicked
+
+    private void cbRememberMeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbRememberMeMouseClicked
+        // TODO add your handling code here:
+        showTemporaryMessage(lblMessage, "Come soon!!", 5000);
+    }//GEN-LAST:event_cbRememberMeMouseClicked
+
+    private void txtForgotPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtForgotPasswordMouseClicked
+        // TODO add your handling code here:
+        new PasswordResetView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_txtForgotPasswordMouseClicked
+
+    private void lblSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSignUpMouseClicked
+        // TODO add your handling code here:
+        new SignupView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblSignUpMouseClicked
 
     /**
      * @param args the command line arguments
@@ -254,7 +370,7 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new LoginView().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -264,24 +380,26 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel PanelUsername;
     private javax.swing.JPanel PanelWelcomeBack;
     private javax.swing.JButton btnLogin;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JCheckBox cbRememberMe;
     private javax.swing.JLabel lblCreateAccount;
     private javax.swing.JLabel lblLoginGoogle;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblMessage;
+    private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblSignUp;
     private javax.swing.JLabel lblText1;
     private javax.swing.JLabel lblText2;
+    private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel lblWelcome;
     private javax.swing.JLabel lblWelcomeBack;
     private javax.swing.JPanel subPanelForm;
     private javax.swing.JPanel subPanelLogin;
     private javax.swing.JPanel subPanelLoginGoogle;
+    private javax.swing.JPanel subPanelMessage;
     private javax.swing.JPanel subPanelSignUp;
     private javax.swing.JPanel subPanelWelcome;
+    private javax.swing.JLabel txtForgotPassword;
+    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }
